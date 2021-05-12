@@ -1,17 +1,29 @@
 import './styles.css';
-// console.log(hi);
-import "./test";
+import menuJson from './menu.json';
+import menuMarkup from './templates/menu.hbs';
 
-// import print from "./test";
-// console.log(print);
-// print("not hi")
+const insertRef = document.querySelector('.js-menu');
+const markup = menuMarkup(menuJson);
+insertRef.innerHTML = markup;
 
-
-// import { text, printText } from "./test"
-// console.log(text);
-// printText("J - S");
-
-import * as object from "./test"
-console.log(object.text);
-object.printText("dghdhg");
-
+const checkboxRef = document.querySelector('#theme-switch-toggle');
+checkboxRef.addEventListener('change', changeTheme);
+const Theme = {LIGHT: 'light-theme', DARK: 'dark-theme'};
+function changeTheme(event) {
+    if (event.target.checked) {
+        replaceTheme(Theme.LIGHT, Theme.DARK);
+    } else {
+        replaceTheme(Theme.DARK, Theme.LIGHT);   
+    }
+}
+function replaceTheme(oldTheme, newTheme) {
+    document.body.classList.remove(oldTheme);
+    document.body.classList.add(newTheme);
+    localStorage.setItem(`Theme`, newTheme);
+}
+function saveTheme() {
+    const theme = localStorage.getItem(`Theme`) ?? Theme.LIGHT;
+    document.body.classList.add(theme);
+    checkboxRef.checked = theme === Theme.DARK;
+}
+saveTheme();
